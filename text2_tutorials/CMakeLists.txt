@@ -1,32 +1,73 @@
-cmake_minimum_required(VERSION 2.8.3)
-project(text2_tutorials)
+cmake_minimum_required(VERSION 2.8.3)#操作系统中安装cmake的最低版本
+project(text2_tutorials) #指定功能包的名称
 
 # 依赖包
-find_package(catkin REQUIRED COMPONENTS
+find_package(catkin REQUIRED COMPONENTS #find_package项是进行构建所需的组件包。
+#目前,roscpp和std_msgs,message_generation被添加为依赖包。如果此处没有输入功能包名称,则在构建时会向用户报错。换句话说,这是让用户先创建依赖包的选项。
   roscpp
   std_msgs
+  message_generation
 )
-
-catkin_package(
-
-)
-
+# find _ package ( Boost REQUIRED COMPONENTS system )  # ///使用ROS以外的功能包时使用的方法。
+# catkin _ python _ setup ()   #catkin_python_setup( )选项是在使用Python,也就是使用rospy时的配置选项。其功能是调用Python安装过程setup.py。
 
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
 )
 
+## Generate messages in the 'msg' folder 
+ add_message_files(#add_message_files是添加消息文件的选项。FILES将引用当前功能包目录的msg目录中的*.msg文件,自动生成一个头文件(*.h)。
+   FILES
+   text2_msg1.msg
+ )
+
+## Generate services in the 'srv' folder
+ add_service_files(#add_service_files是添加要使用的服务文件的选项。使用FILES会引用功能包目录中的srv目录中的*.srv文件
+   FILES
+   text2_srv1.srv
+ )
+
+## Generate actions in the 'action' folder
+# add_action_files(
+#   FILES
+#   Action1.action
+#   Action2.action
+# )
+
+## Generate added messages and services with any dependencies listed here
+ generate_messages(#generate_messages是设置依赖的消息的选项。此示例是将DEPENDENCIES选项设置为使用std_msgs消息包。
+   DEPENDENCIES
+   std_msgs
+ )
+
+catkin_package(#catkin 构建选项
+CATKIN_DEPENDS message_runtime
+)
+
+
+
+
+
+#add_executable是对于构建之后要创建的可执行文件的选项。以下内容是引用src/my_first_ros_pkg_node.cpp文件生成my_first_ros_pkg_node可执行文件。
 add_executable(chap2_example1_a src/example1_a.cpp)
 add_executable(chap2_example1_b src/example1_b.cpp)
+add_executable(chap2_example2_a src/example2_a.cpp)
+add_executable(chap2_example2_b src/example2_b.cpp)
 
-
-add_dependencies(chap2_example1_a chapter2_tutorials_generate_messages_cpp)
-add_dependencies(chap2_example1_b chapter2_tutorials_generate_messages_cpp)
+#如前面描述的add_dsependencies一样,add_dependencies是一个首选项,是在构建库和可执行文件之前创建依赖消息和dynamic reconfigure的设置。
+#如果你有一个包编译.msg .srv，并且可执行文件要使用他们，那么你就需要创建一个显式的依赖项，自动生成message的target。这样才能按顺序来进行编译：
+ # add_dependencies(some_target ${PROJECT_NAME}_generate_messages_cpp)
+  #     这里的some_target是add_executable()设置的target的名字。
+add_dependencies(chap2_example1_a text2_tutorials_generate_messages_cpp)
+add_dependencies(chap2_example1_b text2_tutorials_generate_messages_cpp)
+add_dependencies(chap2_example2_a text2_tutorials_generate_messages_cpp)
+add_dependencies(chap2_example2_b text2_tutorials_generate_messages_cpp)
 
 target_link_libraries(chap2_example1_a ${catkin_LIBRARIES})
 target_link_libraries(chap2_example1_b ${catkin_LIBRARIES})
-
+target_link_libraries(chap2_example2_a ${catkin_LIBRARIES})
+target_link_libraries(chap2_example2_b ${catkin_LIBRARIES})
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -130,12 +171,12 @@ target_link_libraries(chap2_example1_b ${catkin_LIBRARIES})
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
+#catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES text2_tutorials
 #  CATKIN_DEPENDS roscpp std_msgs
 #  DEPENDS system_lib
-)
+#)
 
 ###########
 ## Build ##
