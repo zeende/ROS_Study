@@ -1,16 +1,16 @@
 #include "ros/ros.h"
-#include "chapter2_tutorials/chapter2_msg1.h"
+#include "text2_tutorials/text2_msg1.h"
 #include <sstream>
 
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "example3_a");
   ros::NodeHandle n;
-  ros::Publisher pub = n.advertise<chapter2_tutorials::chapter2_msg1>("message", 1000);
+  ros::Publisher pub = n.advertise<text2_tutorials::text2_msg1>("message", 1000);
   ros::Rate loop_rate(10);
   while (ros::ok())
   {
-    chapter2_tutorials::chapter2_msg1 msg;
+    text2_tutorials::text2_msg1 msg;
     msg.A = 1;
     msg.B = 2;
     msg.C = 3;
