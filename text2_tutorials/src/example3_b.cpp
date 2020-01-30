@@ -1,7 +1,7 @@
 #include "ros/ros.h"
-#include "text2_tutorials/text2_msg1.h"
+#include "chapter2_tutorials/chapter2_msg1.h"
 
-void messageCallback(const text2_tutorials::text2_msg1::ConstPtr& msg)
+void messageCallback(const chapter2_tutorials::chapter2_msg1::ConstPtr& msg)
 {
   ROS_INFO("I heard: [%d] [%d] [%d]", msg->A, msg->B, msg->C);
 }

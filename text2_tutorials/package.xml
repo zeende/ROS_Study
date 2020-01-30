@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>chapter2_tutorials</name>
+  <name>text2_tutorials</name>
   <version>0.0.0</version>
-  <description>The chapter2_tutorials package</description>
+  <description>The text2_tutorials package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->
